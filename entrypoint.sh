@@ -695,13 +695,6 @@ boot_main_nfsd() {
   fi
 
   boot_helper_start_daemon "starting rpc.nfsd on port $port with $threads server thread(s) with $args args" $PATH_BIN_NFSD "${args[@]}"
-
-  # rpcbind isn't required for NFSv4, but if it's not running then nfsd takes over 5 minutes to start up.
-  # it's a bug in either nfs-utils or the kernel, and the code of both is over my head.
-  # so as a workaround we start rpcbind always and (in v4-only scenarios) kill it after nfsd starts up
-  if ! is_nfs3_enabled; then
-    term_process "$PATH_BIN_RPCBIND"
-  fi
 }
 
 boot_main_svcgssd() {
