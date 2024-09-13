@@ -523,12 +523,6 @@ boot_helper_mount() {
   on_failure stop "unable to mount $type filesystem onto $path"
 }
 
-boot_helper_get_version_flags() {
-  local flags=('--nfs-version' 4 '--no-nfs-version' 2 '--no-nfs-version' 3)
-
-  echo "${flags[@]}"
-}
-
 boot_helper_start_daemon() {
 
   local -r msg="$1"
@@ -588,10 +582,7 @@ boot_main_mountd() {
   # --debug  turn on debugging. Valid kinds are: all, auth, call, general and parse.
   # --port   specifies the port number used for RPC listener sockets
 
-  local version_flags
-  read -r -a version_flags <<< "$(boot_helper_get_version_flags)"
-  local -r port="${state[$STATE_MOUNTD_PORT]}"
-  local args=('--port' "$port" "${version_flags[@]}")
+  local args=("-N 2 -N 3 -V 4")
   if is_logging_debug; then
     args+=('--debug' 'all')
   fi
@@ -684,11 +675,7 @@ boot_main_nfsd() {
   #          created by the NFS clients, but a useful starting point is 8 threads. effects of modifying that number can
   #          be checked using the nfsstat(8) program
 
-  local version_flags
-  read -r -a version_flags <<< "$(boot_helper_get_version_flags)"
-  local -r threads="${state[$STATE_NFSD_THREAD_COUNT]}"
-  local -r port="${state[$STATE_NFSD_PORT]}"
-  local args=('--tcp' '--udp' '--port' "$port" "${version_flags[@]}" "$threads")
+  local args=("-N 3 -V 4 --grace-time 10")
 
   if is_logging_debug; then
     args+=('--debug')
