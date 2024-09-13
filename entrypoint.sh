@@ -489,10 +489,6 @@ init_exports() {
 
 init_runtime_assertions() {
 
-  if ! is_granted_linux_capability 'cap_sys_admin'; then
-    bail 'missing CAP_SYS_ADMIN. be sure to run this image with --cap-add SYS_ADMIN or --privileged'
-  fi
-
   # check kernel modules
   assert_kernel_mod nfs
   assert_kernel_mod nfsd
