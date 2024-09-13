@@ -625,7 +625,7 @@ boot_main_rpcbind() {
   if is_logging_debug; then
     arg+=('-d')
   fi
-  boot_helper_start_daemon 'starting rpcbind' $PATH_BIN_RPCBIND "${args[@]}"
+  # boot_helper_start_daemon 'starting rpcbind' $PATH_BIN_RPCBIND "${args[@]}"
 }
 
 boot_main_idmapd() {
