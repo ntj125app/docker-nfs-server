@@ -524,17 +524,7 @@ boot_helper_mount() {
 }
 
 boot_helper_get_version_flags() {
-
-  local -r requested_version="${state[$STATE_NFS_VERSION]}"
-  local flags=('--nfs-version' "$requested_version" '--no-nfs-version' 2)
-
-  if ! is_nfs3_enabled; then
-    flags+=('--no-nfs-version' 3)
-  fi
-
-  if [[ "$requested_version" = '3' ]]; then
-    flags+=('--no-nfs-version' 4)
-  fi
+  local flags=('--nfs-version' 4 '--no-nfs-version' 2 '--no-nfs-version' 3)
 
   echo "${flags[@]}"
 }
@@ -704,7 +694,7 @@ boot_main_nfsd() {
     args+=('--debug')
   fi
 
-  boot_helper_start_daemon "starting rpc.nfsd on port $port with $threads server thread(s)" $PATH_BIN_NFSD "${args[@]}"
+  boot_helper_start_daemon "starting rpc.nfsd on port $port with $threads server thread(s) with $args args" $PATH_BIN_NFSD "${args[@]}"
 
   # rpcbind isn't required for NFSv4, but if it's not running then nfsd takes over 5 minutes to start up.
   # it's a bug in either nfs-utils or the kernel, and the code of both is over my head.
